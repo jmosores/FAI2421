@@ -1,0 +1,195 @@
+<?php
+echo "Inicio\n";
+echo "\n";
+/**
+ * Funcion inicial: ingreso de valores de menu.
+ * @param string $datoIngreso
+ * @return int o string
+ */
+function interfaz($datoIngreso) {
+    echo $datoIngreso;
+    $input = trim(fgets(STDIN));
+    return $input;
+}
+/**
+ * Funcion: verificacion de valores validos para el menu de opciones
+ * @return int
+ */
+function menuDeOpciones() {
+    //$opcion int
+    //$exit boolean
+    $exit = FALSE; //"FLAG" del bucle.
+    //Inicio del bucle
+    do{
+        
+        $opcion = interfaz("Ingrese su opcion: ");
+        if ($opcion >= 0 && $opcion < 4){
+            $exit = TRUE;
+            
+        }
+        else{
+            echo "La opcion ingresada no es valida, reingrese su opcion.\n";
+        }
+        echo "\n";
+        echo "Cargado...";
+        echo "\n";
+    }while(!$exit);
+    return $opcion;
+}
+/**
+ * Funcion: Armado de arreglo de vinos por usuario.
+ * @return array
+ */
+function arregloUsuario() {
+    //$botellas array
+    //$exit boolean
+    //$x = contador
+    $botellas = array();
+    $exit = FALSE;
+    $iD = 0;
+    echo "VINOTECA NEUQUEN:\n";
+    echo "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n";
+    echo "  Carga producto por bulto\n";
+    echo " Opcion 1 - Vinos Malbec.\n";
+    echo " Opcion 2 - Vinos Cabernet Sauvignon.\n";
+    echo " Opcion 3 - Vinos Merlot.\n";
+    echo " Opcion 0 - Finalizar.\n";
+    echo "\n";
+    do{
+        $opcion = menuDeOpciones();
+        if ($opcion == 0) {
+            $exit = TRUE;
+            
+        }else{
+            if ($opcion == 1) {
+                $tipoVino = "Malbec";
+            }
+            
+            elseif ($opcion == 2) {
+                $tipoVino = "Cabernet Sauvignon";
+            }
+            elseif ($opcion == 3) {
+                $tipoVino = "Merlot";
+            }
+            echo "\n";
+            echo "Vino: ".$tipoVino."\n";
+            $botellas[$iD]["variedad"] = $tipoVino;
+            $botellas[$iD]["cantBotella"] = interfaz("Ingrese la cantidad de botellas: ");
+            $botellas[$iD]["anioProduccion"] = interfaz("Ingrese el año de cosecha: ");
+            $botellas[$iD]["precioUnitario"] = interfaz("Ingrese el precio por unidad: ");
+            $iD++;
+        }
+        
+    }while (!$exit);
+    return $botellas;
+    
+}
+
+/**
+ * Funcion: Definicion de arreglo original generico.
+ * @return array
+ */
+function originalArreglo(){
+    $botellas = array();
+    $botellas[0] = array(
+        "variedad" => "Malbec",
+        "cantBotella" => 4,
+        "anioProduccion" => 2015,
+        "precioUnitario" => 98,
+    );
+    $botellas[1] = array(
+        "variedad" => "Malbec",
+        "cantBotella" => 13,
+        "anioProduccion" => 2014,
+        "precioUnitario" => 98,
+    );
+    $botellas[2] = array(
+        "variedad" => "Cabernet Sauvignon",
+        "cantBotella" => 16,
+        "anioProduccion" => 2015,
+        "precioUnitario" => 65,
+    );
+    $botellas[3] = array(
+        "variedad" => "Cabernet Sauvignon",
+        "cantBotella" => 11,
+        "anioProduccion" => 2018,
+        "precioUnitario" => 80,
+    );
+    $botellas[4] = array(
+        "variedad" => "Merlot",
+        "cantBotella" => 14,
+        "anioProduccion" => 2014,
+        "precioUnitario" => 110,
+    );
+    $botellas[5] = array(
+        "variedad" => "Merlot",
+        "cantBotella" => 20,
+        "anioProduccion" => 2015,
+        "precioUnitario" => 90,
+    );
+    return $botellas;
+}
+
+
+/**
+ * Funcion: Calculo de valor promedio y cantidad de botellas de cada tipo
+ * @param array $botellas
+ * @return array
+ */
+function calculoBot($botellas) {
+    //$cantPorVariedad  array
+    $cantXtipoVino = array();
+    $cantXtipoVino["Malbec"] = array(
+        "cantidad_de_botellas" => 1,
+        "precio_promedio" =>1,
+    );
+    $cantXtipoVino["Cabernet Sauvignon"] = array(
+        "cantidad_de_botellas" => 1,
+        "precio_promedio" =>1,
+    );
+    $cantXtipoVino["Merlot"] = array(
+        "cantidad_de_botellas" => 1,
+        "precio_promedio" =>1,
+    );
+    
+    for ($i = 0; $i < count($botellas); $i++) {
+        if ($botellas[$i]["variedad"] == "Malbec") {
+            
+            $cantXtipoVino["Malbec"]["cantidad_de_botellas"] = $cantXtipoVino["Malbec"]["cantidad_de_botellas"] + $botellas[$i]["cantBotella"];
+            $cantXtipoVino["Malbec"]["precio_promedio"] = ($cantXtipoVino["Malbec"]["precio_promedio"] + ($botellas[$i]["precioUnitario"] * $botellas[$i]["cantBotella"]));
+        }
+        
+        elseif ($botellas[$i]["variedad"] == "Cabernet Sauvignon") {
+            
+            $cantXtipoVino["Cabernet Sauvignon"]["cantidad_de_botellas"] = $cantXtipoVino["Cabernet Sauvignon"]["cantidad_de_botellas"] + $botellas[$i]["cantBotella"];
+            $cantXtipoVino["Cabernet Sauvignon"]["precio_promedio"] = ($cantXtipoVino["Cabernet Sauvignon"]["precio_promedio"] + ($botellas[$i]["precioUnitario"] * $botellas[$i]["cantBotella"]));
+        }
+        elseif ($botellas[$i]["variedad"] == "Merlot") {
+            
+            $cantXtipoVino["Merlot"]["cantidad_de_botellas"] = $cantXtipoVino["Merlot"]["cantidad_de_botellas"] + $botellas[$i]["cantBotella"];
+            $cantXtipoVino["Merlot"]["precio_promedio"] = ($cantXtipoVino["Merlot"]["precio_promedio"] + ($botellas[$i]["precioUnitario"] * $botellas[$i]["cantBotella"]));
+        }
+    }
+    $cantXtipoVino["Malbec"]["precio_promedio"] = $cantXtipoVino["Malbec"]["precio_promedio"] / $cantXtipoVino["Malbec"]["cantidad_de_botellas"];
+    $cantXtipoVino["Cabernet Sauvignon"]["precio_promedio"] = $cantXtipoVino["Cabernet Sauvignon"]["precio_promedio"] / $cantXtipoVino["Cabernet Sauvignon"]["cantidad_de_botellas"];
+    $cantXtipoVino["Merlot"]["precio_promedio"] = $cantXtipoVino["Merlot"]["precio_promedio"] / $cantXtipoVino["Merlot"]["cantidad_de_botellas"];
+    
+    return $cantXtipoVino;
+}
+
+/**
+ * FUNCION DEL PROGRAMA PRINCIPAL VINOTECA
+ *
+ */
+
+function fPrincipalProg() {
+    
+    $botellas = arregloUsuario();
+    //$botellas = (creaArregloPrecargado());
+    print_r($botellas);
+    print_r(calculoBot($botellas));
+    
+}
+fPrincipalProg();
+echo "\n";
+echo"Vinoteca Neuquen...";
